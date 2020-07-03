@@ -26,27 +26,26 @@ File2="Memoria.txt"
 executionSummaryFiles=(`find $searchDir -name '*executionSummary-*.txt' -print | sort | grep -v '._'`)
 for i in ${executionSummaryFiles[*]};
 do
-	Total=$(cat $i | tail -n+2 | awk -F ':' 'BEGIN{sum=0}{sum=$6+$7+$8} END{print sum}') #Suma de los tiempos
-	printf "$Total \n" >>$File1
-	#Calculo de las sumas totales, promedio, mínimos y máximos
-	tsimTotal=$(cat $File1 | awk 'BEGIN{min=2**63-1; max=0}{if($File1<min){min=$File1};\ 
-												if($File1>max){max=$File1};\
-													total+=$File1; count+=1;\
-													} \
-													END{ print total, total/count, min, max }')
+        Total=$(cat $i | tail -n+2 | awk -F ':' 'BEGIN{sum=0}{sum=$6+$7+$8} END{print sum}') #Suma de los tiempos
+        printf "$Total \n" >>$File1
+        #Calculo de las sumas totales, promedio, mínimos y máximos
+        tsimTotal=$(cat $File1 | awk 'BEGIN{min=2**63-1; max=0}{if($File1<min){min=$File1};\
+                                                                                                if($File1>max){max=$File1};\
+                                                                                                        total+=$File1; count+=1;\
+                                                                                                        } \
+                                                                                                        END{ print total, total/count, min, max }')
 
-	Suma=$(cat $i | tail -n+2 | awk -F ':' 'BEGIN{suma=0}{suma=$9} END{print suma}') #Suma de la memoria de simulación
-	printf "$Suma \n" >>$File2
-	#Calculo de las sumas totales, promedio, mínimos y máximos
-	memUsed=$(cat $File2 | awk 'BEGIN{ min=2**63-1; max=0}{if($File2<min){min=$File2};\
-													if($File2>max){max=$File2};\
-														suma+=$File2; count+=1;\
-														} \
-														 END{print suma, suma/count, min, max}')
+        Suma=$(cat $i | tail -n+2 | awk -F ':' 'BEGIN{suma=0}{suma=$9} END{print suma}') #Suma de la memoria de simulación
+        printf "$Suma \n" >>$File2
+        #Calculo de las sumas totales, promedio, mínimos y máximos
+        memUsed=$(cat $File2 | awk 'BEGIN{ min=2**63-1; max=0}{if($File2<min){min=$File2};\
+                                                                                                        if($File2>max){max=$File2};\
+                                                                                                                suma+=$File2; count+=1;\
+                                                                                                                } \
+                                                                                                                 END{print suma, suma/count, min, max}')
 done
-
-printf "tsimTotal:%i:%i:%i:%i\n" $tsimTotal >> $OUTFILE
-printf "memUsed:%i:%i:%i:%i\n" $memUsed >> $OUTFILE
+printf "tsimTotal:promedio:min:max\n%i:%i:%i:%i\n" $tsimTotal >> $OUTFILE
+printf "memUsed:promedio:min:max\n%i:%i:%i:%i" $memUsed >> $OUTFILE
 rm Tiempo.txt Memoria.txt
 
 
@@ -74,8 +73,8 @@ do
 											total+=$8; count+=1;\
 											} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp1 >> $file1
-	alls=$(cat $file1 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp1 >> $file1
+	alls=$(cat $file1 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -87,8 +86,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp2 >> $file2
-	residents=$(cat $file2 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp2 >> $file2
+	residents=$(cat $file2 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -100,8 +99,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp3 >> $file3
-	visitorsI=$(cat $file3 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp3 >> $file3
+	visitorsI=$(cat $file3 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -113,8 +112,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp4 >> $file4
-	residentsG0=$(cat $file4 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp4 >> $file4
+	residentsG0=$(cat $file4 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -126,8 +125,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp5 >> $file5
-	residentsG1=$(cat $file5 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp5 >> $file5
+	residentsG1=$(cat $file5 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -139,8 +138,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp6 >> $file6
-	residentsG2=$(cat $file6 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp6 >> $file6
+	residentsG2=$(cat $file6 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -152,8 +151,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp7 >> $file7
-	residentsG1=$(cat $file7 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp7 >> $file7
+	residentsG1=$(cat $file7 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -165,8 +164,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp8 >> $file8
-	visitorsIG0=$(cat $file8 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp8 >> $file8
+	visitorsIG0=$(cat $file8 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -178,8 +177,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp9 >> $file9
-	visitorsIG1=$(cat $file9 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp9 >> $file9
+	visitorsIG1=$(cat $file9 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -191,8 +190,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp10 >> $file10
-	visitorsIG2=$(cat $file10 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp10 >> $file10
+	visitorsIG2=$(cat $file10 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -204,8 +203,8 @@ do
 											total+=$8; countR+=1;\
 											}} \
 											END{ print total,min,max }')
-	printf "%i %i %i\n" $temp11 >> $file11
-	visitorsIG3=$(cat $file11 | awk 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
+	printf "%i:%i:%i\n" $temp11 >> $file11
+	visitorsIG3=$(cat $file11 | awk -F ':' 'BEGIN{ min=2**63-1; max=0 }{if($2<min){min=$2};\
 											if($3>max){max=$3};\
 											total+=$1; count+=1;\
 											} \
@@ -231,34 +230,42 @@ rm File1.txt File2.txt File3.txt File4.txt File5.txt File6.txt File7.txt File8.t
 ######## Ejercicio 3 ##################################################################################################
 
 OutFiles="usePhone-stats.txt"
-File3="tiempo_medicion.txt"
-File4="UsePhone.txt"
 
-printf "timestamp:promedio:min:max \n" >> $OutFilePhone
-archivo_usePhone=(`find $searchDir -name '*usePhone-*.txt' -print | sort | grep -v '._'`)
-
-for i in ${archivo_usePhone[*]};
-do
+usephone(){
 	
-	#Calcula promedios del tiempo medido
-	Tiempo_medicion=(`cat $i | tail -n+3 | cut -d ':' -f 2`) #Las primeras 2 lineas del archivo no se leen
-	for j in ${tiempo_medicion[*]};
-	do
-		printf "%i\n" $j >> $File3
-		Tiempomedicion=$(cat $File3 | awk 'BEGIN{suma=0}{suma+=$1; count+=1 }; END { print suma/count }')
+	usePhoneFiles=(`find $searchDir -name '*usePhone-*.txt' -print | sort `)
+
+
+	tmpFile="archivo.txt"
+	> $tmpFile
+
+	for i in ${usePhoneFiles[*]}; 
+	do	
+		printf "> %s\n" $i
+		tiempos=(`cat $i | tail -n+3 | cut -d ':' -f 3`)
+		for i in ${tiempos[*]};
+		do
+			printf "%d:" $i >> $tmpFile
+		done
+		printf "\n" >> $tmpFile
+	done 
+
+	total=$(head -3 $tmpFile | sed 's/.$//' | tr ':' '\n'| wc -l)             
+
+	> $OutFiles
+	
+
+	printf "#timestamp:promedio:min:max\n" >> $OutFiles
+	for i in $(seq 1 $total); do
+		temp=$(cat $tmpFile | cut -d ':' -f $i |\
+			awk 'BEGIN{ min=2**63-1+2; max=0}\
+				#{if($1<min){min=$1};if($1>max){max=$1};total+=$1;if($1>-1){ count+=1};}\
+				{if($1<min && $1>-1){min=$1};if($1>max){max=$1};total+=$1;if($1>0) {count+=1};}\
+				END {print total/count":"min":"max}')
+		printf "$i:$temp\n" >> $OutFiles
 	done
 
-	#Calcula promedio, min y max del uso del celular
-	UsePhone=(`cat $i | tail -n+3 | cut -d ':' -f 3`)
-	for j in ${UsePhone[*]};
-	do
-		printf "%i\n" $j >> $File4
-		Phone=$(cat $File4 awk 'BEGIN{ min=2**63-1; max=0}{if($j<min){min=$j}};\
-														{if($j>max){max=$j}};\
-														{total+=$j; count+=1};\
-														END { print total/count, min, max}')
-	done
-	printf "%i:" $Tiempomedicion >> $OutFiles
-	printf "%i:%i:%i\n" $Phone >> $OutFiles
-done
-rm tiempo_medicion.txt UsePhone.txt 
+rm archivo.txt
+}
+
+usephone
